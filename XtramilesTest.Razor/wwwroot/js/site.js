@@ -66,7 +66,16 @@ $(document).ready(function () {
                     'Access-Control-Allow-Origin': '*',
                 },
                 success: function (datas) {
-                    console.log(datas)
+                    console.log(datas);
+                    $('#lat').val(datas.city.coord.lat);
+                    $('#long').val(datas.city.coord.lon);
+                    let datTime = getDateTime(datas.time);
+                    $('#time').val(datTime);
+                    $('#wSpeed').val(datas.wind.speed);
+                    $('#weather').val(datas.weather[0].description);
+                    $('#tempF').val(datas.main.temp + ' Fahrenheit');
+                    let celc = fahrenheitToCelsius(datas.main.temp);
+                    $('#tempC').val(celc + ' Celcius');
                 },
                 error: function (request) {
                     console.log(request)
@@ -75,3 +84,21 @@ $(document).ready(function () {
         }
     });
 });
+
+function getDateTime(t) {
+    let date = new Date(t * 1000);
+    // Hours part from the timestamp
+    let hours = date.getHours();
+    // Minutes part from the timestamp
+    let minutes = "0" + date.getMinutes();
+    // Seconds part from the timestamp
+    let seconds = "0" + date.getSeconds();
+
+    // Will display time in 10:30:23 format
+    return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+}
+
+
+function fahrenheitToCelsius(t) {
+    return (t - 32) * 5 / 9
+}
