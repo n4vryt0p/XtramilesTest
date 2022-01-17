@@ -8,7 +8,8 @@ namespace XtramilesTest.WebAPI.Infrastucture
         IEnumerable<WeatherData> WeatherDatas { get; }
         WeatherData this[int id] { get; }
         WeatherData AddWeatherData(WeatherData weatherData);
-        IEnumerable<City> GetCity(string country);
+        //IEnumerable<City> GetCity(string country);
+        IEnumerable<City> this[string country] { get; }
         //void DeleteWeatherData(int id);
     }
 }

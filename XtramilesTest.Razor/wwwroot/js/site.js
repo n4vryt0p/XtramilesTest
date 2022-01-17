@@ -30,6 +30,7 @@ $(document).ready(function () {
                         obj.text = obj.text || obj.name;
                         return obj;
                     });
+                    console.log(datax);
 
                     $('#cityEx').empty();
                     $('#cityEx').select2({
@@ -81,7 +82,6 @@ $(document).ready(function () {
                     'Access-Control-Allow-Origin': '*',
                 },
                 success: function (datas) {
-                    console.log(datas);
                     $('#lat').val(datas.city.coord.lat);
                     $('#long').val(datas.city.coord.lon);
                     let datTime = getDateTime(datas.time);

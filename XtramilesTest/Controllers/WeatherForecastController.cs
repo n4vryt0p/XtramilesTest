@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using XtramilesTest.WebAPI.Infrastucture;
 using XtramilesTest.WebAPI.Models;
 
-namespace XtramilesTest.Controllers
+namespace XtramilesTest.WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -34,23 +31,23 @@ namespace XtramilesTest.Controllers
             return Ok(r);
         }
 
-        //[HttpPost]
-        //public WeatherData Post([FromBody] WeatherData res) =>
-        //repository.AddWeatherData(new WeatherData
-        //{
-        //    City = res.City,
-        //    Time = res.Time,
-        //    Main = res.Main,
-        //    Wind = res.Wind,
-        //    Clouds = res.Clouds,
-        //    Weather = res.Weather,
-        //    Rain = res.Rain
-        //});
-
         [HttpGet("City/{countryID}")]
-        public IEnumerable<City> GetCities(string countryID) => repository.GetCity(countryID);
+        public ActionResult<IEnumerable<City>> GetCities(string countryID)
+        {
+            if (string.IsNullOrEmpty(countryID))
+                return BadRequest("Value must be passed in the request body.");
 
-        //[HttpDelete("{id}")]
-        //public void Delete(int id) => repository.DeleteWeatherData(id);
+            IEnumerable<City> r = repository[countryID];
+
+            if (r.Count() < 1)
+                return NotFound();
+
+            return Ok(r);
+        }
+
+        //[HttpGet("City/{countryID}")]
+        //[ProducesResponseType(StatusCodes.Status200OK)]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //public IEnumerable<City> GetCities(string countryID) => repository[countryID];
     }
 }

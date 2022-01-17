@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using XtramilesTest.Controllers;
+using XtramilesTest.WebAPI.Controllers;
 using XtramilesTest.WebAPI.Infrastucture;
 using XtramilesTest.WebAPI.Models;
 using Xunit;
 
 namespace XtramilesTest.UnitTest
 {
-    public class TestAPI
+    public class TestWeatherAPI
     {
         [Fact]
         public void Test_GET_AllWeatherData()
@@ -61,6 +60,23 @@ namespace XtramilesTest.UnitTest
             // Assert
             var actionResult = Assert.IsType<ActionResult<WeatherData>>(result);
             Assert.IsType<BadRequestObjectResult>(actionResult.Result);
+        }
+
+        [Fact]
+        public void Test_GET_AWeather_NotFound()
+        {
+            // Arrange
+            int id = 9999999;
+            var mockRepo = new Mock<IWeatherRepository>();
+            mockRepo.Setup(repo => repo[It.IsAny<int>()]).Returns<int>((id) => Single(id));
+            var controller = new WeatherForecastController(mockRepo.Object);
+
+            // Act
+            var result = controller.Get(id);
+
+            // Assert
+            var actionResult = Assert.IsType<ActionResult<WeatherData>>(result);
+            Assert.IsType<NotFoundResult>(actionResult.Result);
         }
 
         private static WeatherData Single(int id)

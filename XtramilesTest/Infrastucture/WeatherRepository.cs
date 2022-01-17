@@ -34,8 +34,8 @@ namespace XtramilesTest.WebAPI.Infrastucture
             return weatherData;
         }
 
-        //public void DeleteWeatherData(int id) => items.Remove(id);
+        public IEnumerable<City> this[string country] => items.Values.Select(x => x.City).Where(r => r.Country == country);
 
-        public IEnumerable<City> GetCity(string country) => items.Values.Select(x => x.City).Where(r => r.Country == country);
+        //public IEnumerable<City> GetCity(string country) => items.Values.Select(x => x.City).Where(r => r.Country == country);
     }
 }
