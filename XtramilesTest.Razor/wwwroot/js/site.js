@@ -72,10 +72,10 @@ $(document).ready(function () {
                     let datTime = getDateTime(datas.time);
                     $('#time').val(datTime);
                     $('#wSpeed').val(datas.wind.speed);
+                    $('#visi').val(datas.weather[0].main);
                     $('#weather').val(datas.weather[0].description);
-                    $('#tempF').val(datas.main.temp + ' Fahrenheit');
-                    let celc = fahrenheitToCelsius(datas.main.temp);
-                    $('#tempC').val(celc + ' Celcius');
+                    $('#tempF').val(kelvinTofahrenheit(datas.main.temp) + ' Fahrenheit');
+                    $('#tempC').val(kelvinToCelsius(datas.main.temp) + ' Celcius');
                 },
                 error: function (request) {
                     console.log(request)
@@ -98,7 +98,10 @@ function getDateTime(t) {
     return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 }
 
+function kelvinToCelsius(t) {
+    return t - 273.15;
+}
 
-function fahrenheitToCelsius(t) {
-    return (t - 32) * 5 / 9
+function kelvinTofahrenheit(t) {
+    return ((t - 273.15) * 1.8) + 32;
 }
