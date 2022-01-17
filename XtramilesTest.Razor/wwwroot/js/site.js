@@ -30,8 +30,6 @@ $(document).ready(function () {
                         obj.text = obj.text || obj.name;
                         return obj;
                     });
-                    console.log(datax);
-
                     $('#cityEx').empty();
                     $('#cityEx').select2({
                         placeholder: 'Select City...',
@@ -42,7 +40,9 @@ $(document).ready(function () {
                     $('#cityEx').prop('disabled', false);
                 },
                 error: function (request) {
-                    console.log(request)
+                    $('#cityEx').empty();
+                    $('#cityEx').val(null).trigger("change");
+                    $('#cityEx').prop('disabled', false);
                 }
             });
         }
