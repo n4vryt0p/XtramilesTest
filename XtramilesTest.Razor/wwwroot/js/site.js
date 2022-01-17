@@ -48,8 +48,23 @@ $(document).ready(function () {
     });
 
     $('#countryEx').on('select2:unselect', function (e) {
+        var elements = document.getElementsByTagName("input");
+        for (var ii = 0; ii < elements.length; ii++) {
+            if (elements[ii].type == "text") {
+                elements[ii].value = "";
+            }
+        }
         $('#cityEx').prop('disabled', true);
         $('#cityEx').val(null).trigger('change');
+    });
+
+    $('#cityEx').on('select2:unselect', function (e) {
+        var elements = document.getElementsByTagName("input");
+        for (var ii = 0; ii < elements.length; ii++) {
+            if (elements[ii].type == "text") {
+                elements[ii].value = "";
+            }
+        }
     });
 
     $('#cityEx').on('select2:select', function (e) {
@@ -76,6 +91,8 @@ $(document).ready(function () {
                     $('#weather').val(datas.weather[0].description);
                     $('#tempF').val(kelvinTofahrenheit(datas.main.temp) + ' Fahrenheit');
                     $('#tempC').val(kelvinToCelsius(datas.main.temp) + ' Celcius');
+                    $('#humid').val(datas.main.humidity);
+                    $('#press').val(datas.main.pressure);
                 },
                 error: function (request) {
                     console.log(request)
