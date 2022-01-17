@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using XtramilesTest.WebAPI.Infrastucture;
+using XtramilesTest.WebAPI.Models;
 
 namespace XtramilesTest.Controllers
 {
@@ -11,29 +14,43 @@ namespace XtramilesTest.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
-        }
+        private readonly IWeatherRepository repository;
+        public WeatherForecastController(IWeatherRepository repo) => repository = repo;
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IEnumerable<WeatherData> Get() => repository.WeatherDatas;
+
+        [HttpGet("{id}")]
+        public ActionResult<WeatherData> Get(int id)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            if (id == 0)
+                return BadRequest("Value must be passed in the request body.");
+
+            WeatherData r = repository[id];
+
+            if (r is null)
+                return NotFound();
+
+            return Ok(r);
         }
+
+        //[HttpPost]
+        //public WeatherData Post([FromBody] WeatherData res) =>
+        //repository.AddWeatherData(new WeatherData
+        //{
+        //    City = res.City,
+        //    Time = res.Time,
+        //    Main = res.Main,
+        //    Wind = res.Wind,
+        //    Clouds = res.Clouds,
+        //    Weather = res.Weather,
+        //    Rain = res.Rain
+        //});
+
+        [HttpGet("City/{countryID}")]
+        public IEnumerable<City> GetCities(string countryID) => repository.GetCity(countryID);
+
+        //[HttpDelete("{id}")]
+        //public void Delete(int id) => repository.DeleteWeatherData(id);
     }
 }
