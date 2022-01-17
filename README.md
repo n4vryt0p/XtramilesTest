@@ -1,7 +1,6 @@
 TEST #2
 
-Using .Net Core 3.1.22
-
+Using .Net Core 3.1.22, created with Visual Studio 2022
 
 XtramilesTest.WebAPI - RESTFUL API, currently running at http://localhost:5000
 
